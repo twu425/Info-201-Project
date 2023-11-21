@@ -9,16 +9,16 @@ covid vaccine data source: https://healthdata.gov/dataset/COVID-19-Vaccinations-
 library(tidyverse)
 influenza_vaccine_data = read_csv("data/Influenza_data.csv")
 print(sample_n(influenza_vaccine_data,10))
-covid_vaccine_data = read_csv("data/Covid_data.zip") # Note: the covid data is huge relative to the influenza data, so it might take some time to load
+covid_vaccine_data = read_csv("data/Covid_data.csv") # Note: the covid data is huge relative to the influenza data, so it might take some time to load
 print(sample_n(covid_vaccine_data,10))
 ```
 # Data Cleaning, Influenza Vaccine
 Filter out irrelevant geography types to get only the counties, clean up some other aspects
-It is important to point out that this data is estimated
+It is important to point out that this data is estimated based off of state data and population distribution
 ```{r}
 # Note: This dataset has column names which haves spaces in them. When refering to these columns, enclose the column name with backticks (`).
 influenza_vaccine_data_cleaned = influenza_vaccine_data %>%
+    filter(Vaccine == "Seasonal_Influenza") %>% # Some of these vaccines are special variants, which we will filter out.
     filter(`Geography Type` == "Counties")
-    filter(Vaccine == "Seasonal_Influenza") # Some of these vaccines are special variants, which we will filter out.
 ```
 
