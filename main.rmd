@@ -1,22 +1,24 @@
 ---
-title: "R Notebook"
+title: "Info 201 Project"
 output: html_notebook
 ---
-
-The [R plugin](https://www.jetbrains.com/help/pycharm/r-plugin-support.html) for IntelliJ-based IDEs provides
-handy capabilities to work with the [R Markdown](https://www.jetbrains.com/help/pycharm/r-markdown.html) files.
-To [add](https://www.jetbrains.com/help/pycharm/r-markdown.html#add-code-chunk) a new R chunk,
-position the caret at any line or the code chunk, then click "+".
-
-The code chunk appears:
+# Load libraries and packages, print out sample of datasets
+influenza vaccine data source: https://data.cdc.gov/Flu-Vaccinations/Influenza-Vaccination-Coverage-for-All-Ages-6-Mont/vh55-3he6
+covid vaccine data source: https://healthdata.gov/dataset/COVID-19-Vaccinations-in-the-United-States-County/ipdn-uaih
 ```{r}
+library(tidyverse)
+influenza_vaccine_data = read_csv("data/Influenza_data.csv")
+print(sample_n(influenza_vaccine_data,10))
+covid_vaccine_data = read_csv("data/Covid_data.zip") # Note: the covid data is huge relative to the influenza data, so it might take some time to load
+print(sample_n(covid_vaccine_data,10))
+```
+# Data Cleaning, Influenza Vaccine
+Filter out irrelevant geography types to get only the counties, clean up some other aspects
+It is important to point out that this data is estimated
+```{r}
+# Note: This dataset has column names which haves spaces in them. When refering to these columns, enclose the column name with backticks (`).
+influenza_vaccine_data_cleaned = influenza_vaccine_data %>%
+    filter(`Geography Type` == "Counties")
+    filter(Vaccine == "Seasonal_Influenza") # Some of these vaccines are special variants, which we will filter out.
 ```
 
-Type any R code in the chunk, for example:
-```{r}
-mycars <- within(mtcars, { cyl <- ordered(cyl) })
-mycars
-```
-
-Now, click the **Run** button on the chunk toolbar to [execute](https://www.jetbrains.com/help/pycharm/r-markdown.html#run-r-code) the chunk code. The result should be placed under the chunk.
-Click the **Knit and Open Document** to build and preview an output.
