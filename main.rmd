@@ -62,7 +62,7 @@ print(vaccine_data)
 # Basic Plot
 ```{r}
 vaccine_data %>%
-        ggplot(aes(x = Influenza_Percentage, y = Covid_Percentage, col = Date)) +
+        ggplot(aes(x = Influenza_Percentage, y = Covid_Percentage)) +
         geom_point()
 ```
 ```{r}
