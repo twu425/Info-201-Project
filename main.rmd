@@ -5,6 +5,9 @@ output: html_notebook
 # Load libraries and packages, print out sample of datasets
 influenza vaccine data source: https://data.cdc.gov/Flu-Vaccinations/Influenza-Vaccination-Coverage-for-All-Ages-6-Mont/vh55-3he6
 covid vaccine data source: https://data.cdc.gov/Vaccinations/COVID-19-Vaccinations-in-the-United-States-County/8xkx-amqh
+Question: Does the % of influenza vaccinations pre covid (2019-2020) correlate to the % of Covid-19 Dose 1 Vaccinations (as of 2023-05-10) *May add more time stamps* in US Counties?
+
+Theory: We may be able to extrapolate based on our question whether or not people how people's willingness to take vaccines in general (the assumption is that influenza vaccines can represent "vaccines in general") impacts their willingness to take the Covid-19 vaccine.
 ```{r}
 library(tidyverse)
 influenza_vaccine_data = read_csv("data/Influenza_data.csv")
@@ -19,16 +22,16 @@ It is important to point out that this data is estimated based off of state data
 ```{r}
 # Note: This dataset has column names which haves spaces in them. When refering to these columns, enclose the column name with backticks (`). FIPS = County identifier (Since many counties have duplicate names).
 influenza_vaccine_data_cleaned = influenza_vaccine_data %>%
-  filter(Vaccine == "Any Influenza Vaccination, Seasonal or H1N1") %>% # All types of infl. vaccinations are counted
+  filter(Vaccine == "Seasonal Influenza") %>% # Only the general influenza vaccine will be considered as the special variants make up a negligible proportion
   filter(`Geography Type` == "Counties") %>% # Filter out non-county data (state/local areas)
   filter(`Dimension Type` == "Age") %>% # Filter out vaccine demographic data (data only includes people >=18)
   filter(!is.na(as.numeric(FIPS))) %>% # Remove unique region-county identifiers
-  mutate(`Estimate (%)` = as.numeric(`Estimate (%)`)) # Convert the estimate % from character to numeric
-  #mutate(`Season/Survey Year` = as.Date("Season/Survey Year", ))
-  select(FIPS, `Estimate (%)`,`Season/Survey Year`) %>% # Filter out irrelevant columns
   filter(`Season/Survey Year` == "2019-20") %>% # Only keep 2019-2020 data for simplicity (may add more dates later)
-  rename(Influenza_Percentage = as.numeric(`Estimate (%)`)) %>%
-  rename(Date = "Season/Survey Year")
+  rename(Influenza_Percentage = `Estimate (%)`) %>%
+  mutate(Influenza_Percentage = as.numeric(Influenza_Percentage)) %>%# Convert the estimate % from character to numeric
+  #rename(Date = "Season/Survey Year")
+  select(FIPS, Influenza_Percentage) %>% # Filter out irrelevant columns
+
 
 print(influenza_vaccine_data_cleaned)
 ```
@@ -52,13 +55,16 @@ print(covid_vaccine_data_cleaned)
 # Combine Dataframes
 ```{r}
 vaccine_data = merge(influenza_vaccine_data_cleaned, covid_vaccine_data_cleaned, by = c("FIPS"), all = TRUE)
-vaccine_data = select(vaccine_data,FIPS, Influenza_Percentage, Covid_Percentage)
+vaccine_data = select(vaccine_data,FIPS, Influenza_Percentage, Covid_Percentage, Date)
 print(vaccine_data)
 ```
 
 # Basic Plot
 ```{r}
 vaccine_data %>%
-        ggplot(aes(x = Influenza_Percentage, y = Covid_Percentage)) +
+        ggplot(aes(x = Influenza_Percentage, y = Covid_Percentage, col = Date)) +
         geom_point()
+```
+```{r}
+#print(covid_vaccine_data)
 ```
