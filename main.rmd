@@ -4,21 +4,61 @@ output: html_notebook
 ---
 # Load libraries and packages, print out sample of datasets
 influenza vaccine data source: https://data.cdc.gov/Flu-Vaccinations/Influenza-Vaccination-Coverage-for-All-Ages-6-Mont/vh55-3he6
-covid vaccine data source: https://healthdata.gov/dataset/COVID-19-Vaccinations-in-the-United-States-County/ipdn-uaih
+covid vaccine data source: https://data.cdc.gov/Vaccinations/COVID-19-Vaccinations-in-the-United-States-County/8xkx-amqh
 ```{r}
 library(tidyverse)
 influenza_vaccine_data = read_csv("data/Influenza_data.csv")
 print(sample_n(influenza_vaccine_data,10))
 covid_vaccine_data = read_csv("data/Covid_data.csv") # Note: the covid data is huge relative to the influenza data, so it might take some time to load
 print(sample_n(covid_vaccine_data,10))
+#print(covid_vaccine_data)
 ```
 # Data Cleaning, Influenza Vaccine
 Filter out irrelevant geography types to get only the counties, clean up some other aspects
 It is important to point out that this data is estimated based off of state data and population distribution
 ```{r}
-# Note: This dataset has column names which haves spaces in them. When refering to these columns, enclose the column name with backticks (`).
+# Note: This dataset has column names which haves spaces in them. When refering to these columns, enclose the column name with backticks (`). FIPS = County identifier (Since many counties have duplicate names).
 influenza_vaccine_data_cleaned = influenza_vaccine_data %>%
-    filter(Vaccine == "Seasonal_Influenza") %>% # Some of these vaccines are special variants, which we will filter out.
-    filter(`Geography Type` == "Counties")
+  filter(Vaccine == "Any Influenza Vaccination, Seasonal or H1N1") %>% # All types of infl. vaccinations are counted
+  filter(`Geography Type` == "Counties") %>% # Filter out non-county data (state/local areas)
+  filter(`Dimension Type` == "Age") %>% # Filter out vaccine demographic data (data only includes people >=18)
+  filter(!is.na(as.numeric(FIPS))) %>% # Remove unique region-county identifiers
+  mutate(`Estimate (%)` = as.numeric(`Estimate (%)`)) # Convert the estimate % from character to numeric
+  #mutate(`Season/Survey Year` = as.Date("Season/Survey Year", ))
+  select(FIPS, `Estimate (%)`,`Season/Survey Year`) %>% # Filter out irrelevant columns
+  filter(`Season/Survey Year` == "2019-20") %>% # Only keep 2019-2020 data for simplicity (may add more dates later)
+  rename(Influenza_Percentage = as.numeric(`Estimate (%)`)) %>%
+  rename(Date = "Season/Survey Year")
+
+print(influenza_vaccine_data_cleaned)
+```
+# Data Cleaning, Covid Vaccine
+add description here
+```{r}
+covid_vaccine_data_cleaned = covid_vaccine_data %>%
+  select(FIPS, Administered_Dose1_Pop_Pct, Date) %>% # Remove unnecessary columns. We'll only look at dose1 in the two dose covid vaccine.
+  #mutate(Recip_County = sub(" .*", "", Recip_County)) %>% # Remove the unnecessary "county" specification after every county name
+  mutate(Date = as.Date(Date,format = "%m/%d/%Y")) %>% # Convert dates into a R friendly format
+  filter(!is.na(as.numeric(FIPS))) %>% # Remove unique region-county identifiers
+  group_by(FIPS) %>%
+  top_n(1, Date) %>% # Only get the most recent date for each county (may add more dates later)
+
+  rename(Covid_Percentage = Administered_Dose1_Pop_Pct)
+
+print(covid_vaccine_data_cleaned)
 ```
 
+
+# Combine Dataframes
+```{r}
+vaccine_data = merge(influenza_vaccine_data_cleaned, covid_vaccine_data_cleaned, by = c("FIPS"), all = TRUE)
+vaccine_data = select(vaccine_data,FIPS, Influenza_Percentage, Covid_Percentage)
+print(vaccine_data)
+```
+
+# Basic Plot
+```{r}
+vaccine_data %>%
+        ggplot(aes(x = Influenza_Percentage, y = Covid_Percentage)) +
+        geom_point()
+```
