@@ -43,25 +43,22 @@ covid_vaccine_data_cleaned = covid_vaccine_data %>%
   #mutate(Recip_County = sub(" .*", "", Recip_County)) %>% # Remove the unnecessary "county" specification after every county name
   mutate(Date = as.Date(Date,format = "%m/%d/%Y")) %>% # Convert dates into a R friendly format
   filter(!is.na(as.numeric(FIPS))) %>% # Remove unique region-county identifiers
-  group_by(FIPS) %>%
-  top_n(1, Date) %>% # Only get the most recent date for each county (may add more dates later)
-
   rename(Covid_Percentage = Administered_Dose1_Pop_Pct)
-
 print(covid_vaccine_data_cleaned)
 ```
-
-
 # Combine Dataframes
 ```{r}
-vaccine_data = merge(influenza_vaccine_data_cleaned, covid_vaccine_data_cleaned, by = c("FIPS"), all = TRUE)
-vaccine_data = select(vaccine_data,FIPS, Influenza_Percentage, Covid_Percentage, Date)
-print(vaccine_data)
+covid_vaccine_data_latest = covid_vaccine_data_cleaned %>%
+  group_by(FIPS) %>%
+  top_n(1, Date) # Only get the most recent date for each county (may add more dates later)
+vaccine_data_latest = merge(influenza_vaccine_data_cleaned, covid_vaccine_data_latest, by = c("FIPS"), all = TRUE)
+vaccine_data_latest = select(vaccine_data_latest,FIPS, Influenza_Percentage, Covid_Percentage)
+print(vaccine_data_latest)
 ```
 
-# Basic Plot
+# Basic Plot (Latest)
 ```{r}
-vaccine_data %>%
+vaccine_data_latest %>%
         ggplot(aes(x = Influenza_Percentage, y = Covid_Percentage)) +
         geom_point()
 ```
