@@ -2,23 +2,31 @@
 title: "Info 201 Project"
 output: html_notebook
 ---
-# Load libraries and packages, print out sample of datasets
-influenza vaccine data source: https://data.cdc.gov/Flu-Vaccinations/Influenza-Vaccination-Coverage-for-All-Ages-6-Mont/vh55-3he6
+# Description
+Influenza vaccine data source: https://data.cdc.gov/Flu-Vaccinations/Influenza-Vaccination-Coverage-for-All-Ages-6-Mont/vh55-3he6
 covid vaccine data source: https://data.cdc.gov/Vaccinations/COVID-19-Vaccinations-in-the-United-States-County/8xkx-amqh
 Question: Does the % of influenza vaccinations pre covid (2019-2020) correlate to the % of Covid-19 Dose 1 Vaccinations (as of 2023-05-10) *May add more time stamps* in US Counties?
 
-Theory: We may be able to extrapolate based on our question whether or not people how people's willingness to take vaccines in general (the assumption is that influenza vaccines can represent "vaccines in general") impacts their willingness to take the Covid-19 vaccine.
+Theory: We may be able to extrapolate based on our question whether or not people's willingness to take vaccines in general (the assumption is that influenza vaccines can represent "vaccines in general") impacts their willingness to take the Covid-19 vaccine (and if so, to what extent?).
+
+# TODO:
+- Format Covid data to make it easy to graph over time (we are going to be comparing covid data over time, but for influenza data we'll use one date *2019-2020 I think*). We only need one snapshot of influenza since it's simply to gauge "vaccine willingness" shortly before covid. We want to show Covid data over time as we might find that the correlation is stronger/weaker depending on time as there was a lot of drama over it when it came out that died down over time.
+- Determine correlation coefficient between covid and influenza vaccine percentage
+- Currently, the county maps display covid and influenza vaccination percentages. Most importantly we need to graph the correlation coefficient on a county map, as that should be our main takeaway. We may be able to graph other data findings we have.
+- Less important, but some counties are very small and as such may be outliers (small counties often have 100% or 0% vaccination rates). Perhaps we could import a dataframe of counties and their populations, and use it to filter out counties that have populations too low from our data.
+
+# Load libraries and data, print samples
 ```{r}
 library(tidyverse)
 influenza_vaccine_data = read_csv("data/Influenza_data.csv")
 print(sample_n(influenza_vaccine_data,10))
 covid_vaccine_data = read_csv("data/Covid_data.csv") # Note: the covid data is huge relative to the influenza data, so it might take some time to load
 print(sample_n(covid_vaccine_data,10))
-#print(covid_vaccine_data)
 ```
 # Data Cleaning, Influenza Vaccine
-Filter out irrelevant geography types to get only the counties, clean up some other aspects
-It is important to point out that this data is estimated based off of state data and population distribution
+Filter out irrelevant geography types to get only the counties, clean up some other aspects.
+It is important to point out that this data is estimated based off of state data and population distribution, meaning the actual percentage of each county may not be accurate. Unfortunately, we do not have the same amount of precision as we do with the covid data as there were less resources dedicated to influenza.
+We are only focusing on 2019-2020 influenza data because we just need a snapshot of how willing people are to taking vaccines shortly before COVID-19.
 ```{r}
 # Note: This dataset has column names which haves spaces in them. When refering to these columns, enclose the column name with backticks (`). FIPS = County identifier (Since many counties have duplicate names).
 influenza_vaccine_data_cleaned = influenza_vaccine_data %>%
@@ -36,7 +44,7 @@ influenza_vaccine_data_cleaned = influenza_vaccine_data %>%
 print(sample_n(influenza_vaccine_data_cleaned,10))
 ```
 # Data Cleaning, Covid Vaccine
-add description here
+The covid data contains a lot of information irrelevant to our investigation.
 ```{r}
 covid_vaccine_data_cleaned = covid_vaccine_data %>%
   select(FIPS, Administered_Dose1_Pop_Pct, Date) %>% # Remove unnecessary columns. We'll only look at dose1 in the two dose covid vaccine.
@@ -61,7 +69,8 @@ print(vaccine_data_latest)
 ```
 
 # Basic Plot (Latest)
-TODO: Find the correlation coefficent between covid percentage and infl percentage
+This scatterplot seems to demonstrate some correlation between infl and covid vaccination but the relationship appears very weak
+There are a considerable amount of counties that report a near 100% vaccination rate, they are likely low population counties.
 ```{r}
 vaccine_data_latest %>%
         ggplot(aes(x = Influenza_Percentage, y = Covid_Percentage)) +
@@ -70,7 +79,7 @@ vaccine_data_latest %>%
 # County Map Example
 ```{r}
 library(usmap)
-vaccine_data_latest_corrected = rename(vaccine_data_latest, fips = FIPS) # For some reason the map library requires the fips column to be lowercase
+vaccine_data_latest_corrected = rename(vaccine_data_latest, fips = FIPS) # For some reason the map library requires the fips column name to be lowercase
 plot_usmap( data = vaccine_data_latest_corrected , values = "Influenza_Percentage", "counties", color="black")
 plot_usmap( data = vaccine_data_latest_corrected , values = "Covid_Percentage", "counties", color="black")
 
