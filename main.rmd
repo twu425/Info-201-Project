@@ -30,10 +30,10 @@ influenza_vaccine_data_cleaned = influenza_vaccine_data %>%
   rename(Influenza_Percentage = `Estimate (%)`) %>%
   mutate(Influenza_Percentage = as.numeric(Influenza_Percentage)) %>%# Convert the estimate % from character to numeric
   #rename(Date = "Season/Survey Year")
-  select(FIPS, Influenza_Percentage) %>% # Filter out irrelevant columns
+  select(FIPS, Influenza_Percentage) # Filter out irrelevant columns
 
 
-print(influenza_vaccine_data_cleaned)
+print(sample_n(influenza_vaccine_data_cleaned,10))
 ```
 # Data Cleaning, Covid Vaccine
 add description here
@@ -48,6 +48,10 @@ print(covid_vaccine_data_cleaned)
 ```
 # Combine Dataframes
 ```{r}
+# This is a quick and dirty way to combine the data
+# I only consider the most recent covid vaccination poll
+# It might be better to demonstrate it over time
+
 covid_vaccine_data_latest = covid_vaccine_data_cleaned %>%
   group_by(FIPS) %>%
   top_n(1, Date) # Only get the most recent date for each county (may add more dates later)
@@ -57,11 +61,17 @@ print(vaccine_data_latest)
 ```
 
 # Basic Plot (Latest)
+TODO: Find the correlation coefficent between covid percentage and infl percentage
 ```{r}
 vaccine_data_latest %>%
         ggplot(aes(x = Influenza_Percentage, y = Covid_Percentage)) +
         geom_point()
 ```
+# County Map Example
 ```{r}
-#print(covid_vaccine_data)
+library(usmap)
+vaccine_data_latest_corrected = rename(vaccine_data_latest, fips = FIPS) # For some reason the map library requires the fips column to be lowercase
+plot_usmap( data = vaccine_data_latest_corrected , values = "Influenza_Percentage", "counties", color="black")
+plot_usmap( data = vaccine_data_latest_corrected , values = "Covid_Percentage", "counties", color="black")
+
 ```
