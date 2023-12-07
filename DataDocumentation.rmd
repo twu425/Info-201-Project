@@ -1,0 +1,6 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+We have our results in our 3 final datasets (FirstMonthjoinedPlus_Out, SixMonthjoinedPlus_Out, OneYearjoinedPlus_Out), each with 5 columns containing FIPS (County identifier), Date, Covid_Percentage, Influenza_Percentage, and Census2019 18+ Data. Each dataframe describes a different year in which the Covid_Percentage was calculated. (Ideally we would've compressed our data into a single dataframe to prevent the repetition of non-covid data, however we have not done that). Each row represents a unique county. Date is in YYYY-MM-DD format. Covid and Influenza percentage are percentages without the % symbol. Census2019 Data is a numeric value describing the estimated amount of people in the county.
