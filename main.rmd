@@ -2,85 +2,245 @@
 title: "Info 201 Project"
 output: html_notebook
 ---
+
 # Description
-Influenza vaccine data source: https://data.cdc.gov/Flu-Vaccinations/Influenza-Vaccination-Coverage-for-All-Ages-6-Mont/vh55-3he6
-covid vaccine data source: https://data.cdc.gov/Vaccinations/COVID-19-Vaccinations-in-the-United-States-County/8xkx-amqh
-Question: Does the % of influenza vaccinations pre covid (2019-2020) correlate to the % of Covid-19 Dose 1 Vaccinations (as of 2023-05-10) *May add more time stamps* in US Counties?
+
+ Question: Does the % of influenza vaccinations pre covid (2019-2020) correlate to the % of Covid-19 Dose 1 Vaccinations (as of 2023-05-10) *May add more time stamps* in US Counties?
 
 Theory: We may be able to extrapolate based on our question whether or not people's willingness to take vaccines in general (the assumption is that influenza vaccines can represent "vaccines in general") impacts their willingness to take the Covid-19 vaccine (and if so, to what extent?).
 
-# TODO:
-- Format Covid data to make it easy to graph over time (we are going to be comparing covid data over time, but for influenza data we'll use one date *2019-2020 I think*). We only need one snapshot of influenza since it's simply to gauge "vaccine willingness" shortly before covid. We want to show Covid data over time as we might find that the correlation is stronger/weaker depending on time as there was a lot of drama over it when it came out that died down over time.
-- Determine correlation coefficient between covid and influenza vaccine percentage
-- Currently, the county maps display covid and influenza vaccination percentages. Most importantly we need to graph the correlation coefficient on a county map, as that should be our main takeaway. We may be able to graph other data findings we have.
-- Less important, but some counties are very small and as such may be outliers (small counties often have 100% or 0% vaccination rates). Perhaps we could import a dataframe of counties and their populations, and use it to filter out counties that have populations too low from our data.
+# Introduction
+
+
+
+
+# Data
+
+
+
 
 # Load libraries and data, print samples
+Influenza vaccine data source: <https://data.cdc.gov/Flu-Vaccinations/Influenza-Vaccination-Coverage-for-All-Ages-6-Mont/vh55-3he6>
+Covid vaccine data source: <https://data.cdc.gov/Vaccinations/COVID-19-Vaccinations-in-the-United-States-County/8xkx-amqh>
 ```{r}
 library(tidyverse)
-influenza_vaccine_data = read_csv("data/Influenza_data.csv")
+influenza_vaccine_data = read.csv("data/Influenza_data.csv")
 print(sample_n(influenza_vaccine_data,10))
-covid_vaccine_data = read_csv("data/Covid_data.csv") # Note: the covid data is huge relative to the influenza data, so it might take some time to load
+covid_vaccine_data = read.csv("data/Covid_data.csv") # Note: the covid data is huge relative to the influenza data, so it might take some time to load
 print(sample_n(covid_vaccine_data,10))
 ```
-# Data Cleaning, Influenza Vaccine
-Filter out irrelevant geography types to get only the counties, clean up some other aspects.
-It is important to point out that this data is estimated based off of state data and population distribution, meaning the actual percentage of each county may not be accurate. Unfortunately, we do not have the same amount of precision as we do with the covid data as there were less resources dedicated to influenza.
-We are only focusing on 2019-2020 influenza data because we just need a snapshot of how willing people are to taking vaccines shortly before COVID-19.
+
+# Data Cleaning
+Filter out irrelevant geography types to get only the counties, clean up some other aspects. It is important to point out that this data is estimated based off of state data and population distribution, meaning the actual percentage of each county may not be accurate. Unfortunately, we do not have the same amount of precision as we do with the covid data as there were less resources dedicated to influenza. We are only focusing on 2019-2020 influenza data because we just need a snapshot of how willing people are to taking vaccines shortly before COVID-19.
+
+This results in two dataframes: covid_vaccine_data_cleaned and influenza_vaccine_data_cleaned
+Both dataframe's rows represent a unique county
+covid_vaccine_data_cleaned and influenza_vaccine_data_both both have two columns, FIPS (County Identifier), and a percentage of vaccination relative to population. Furthermore, covid_vaccine_data_cleaned contains two additional column, 2019 census data, for use in identifying outliers later, as well as date. All the influenza data is from 2019-2020.
+
 ```{r}
+covid_vaccine_data_cleaned = covid_vaccine_data %>%
+  select(FIPS, Administered_Dose1_Pop_Pct, Date, Census2019_18PlusPop) %>% # Remove unnecessary columns. We'll only look at dose1 in the two dose covid vaccine.
+  #mutate(Recip_County = sub(" .*", "", Recip_County)) %>% # Remove the unnecessary "county" specification after every county name
+  mutate(Date = as.Date(Date,format = "%m/%d/%Y")) %>% # Convert dates into a R friendly format
+  filter(!is.na(as.numeric(FIPS))) %>% # Remove unique region-county identifiers
+  rename(Covid_Percentage = Administered_Dose1_Pop_Pct) %>%
+  mutate(FIPS = as.numeric(FIPS))
+
 # Note: This dataset has column names which haves spaces in them. When refering to these columns, enclose the column name with backticks (`). FIPS = County identifier (Since many counties have duplicate names).
 influenza_vaccine_data_cleaned = influenza_vaccine_data %>%
   filter(Vaccine == "Seasonal Influenza") %>% # Only the general influenza vaccine will be considered as the special variants make up a negligible proportion
-  filter(`Geography Type` == "Counties") %>% # Filter out non-county data (state/local areas)
-  filter(`Dimension Type` == "Age") %>% # Filter out vaccine demographic data (data only includes people >=18)
+  filter(`Geography.Type` == "Counties") %>% # Filter out non-county data (state/local areas)
+  filter(`Dimension.Type` == "Age") %>% # Filter out vaccine demographic data (data only includes people >=18)
   filter(!is.na(as.numeric(FIPS))) %>% # Remove unique region-county identifiers
-  filter(`Season/Survey Year` == "2019-20") %>% # Only keep 2019-2020 data for simplicity (may add more dates later)
-  rename(Influenza_Percentage = `Estimate (%)`) %>%
+  filter(`Season.Survey.Year` == "2019-20") %>% # Only keep 2019-2020 data for simplicity (may add more dates later)
+  rename(Influenza_Percentage = `Estimate....`) %>%
   mutate(Influenza_Percentage = as.numeric(Influenza_Percentage)) %>%# Convert the estimate % from character to numeric
   #rename(Date = "Season/Survey Year")
   select(FIPS, Influenza_Percentage) # Filter out irrelevant columns
 
-
 print(sample_n(influenza_vaccine_data_cleaned,10))
-```
-# Data Cleaning, Covid Vaccine
-The covid data contains a lot of information irrelevant to our investigation.
-```{r}
-covid_vaccine_data_cleaned = covid_vaccine_data %>%
-  select(FIPS, Administered_Dose1_Pop_Pct, Date) %>% # Remove unnecessary columns. We'll only look at dose1 in the two dose covid vaccine.
-  #mutate(Recip_County = sub(" .*", "", Recip_County)) %>% # Remove the unnecessary "county" specification after every county name
-  mutate(Date = as.Date(Date,format = "%m/%d/%Y")) %>% # Convert dates into a R friendly format
-  filter(!is.na(as.numeric(FIPS))) %>% # Remove unique region-county identifiers
-  rename(Covid_Percentage = Administered_Dose1_Pop_Pct)
-print(covid_vaccine_data_cleaned)
-```
-# Combine Dataframes
-```{r}
-# This is a quick and dirty way to combine the data
-# I only consider the most recent covid vaccination poll
-# It might be better to demonstrate it over time
+print(sample_n(covid_vaccine_data_cleaned, 10))
 
-covid_vaccine_data_latest = covid_vaccine_data_cleaned %>%
-  group_by(FIPS) %>%
-  top_n(1, Date) # Only get the most recent date for each county (may add more dates later)
-vaccine_data_latest = merge(influenza_vaccine_data_cleaned, covid_vaccine_data_latest, by = c("FIPS"), all = TRUE)
-vaccine_data_latest = select(vaccine_data_latest,FIPS, Influenza_Percentage, Covid_Percentage)
-print(vaccine_data_latest)
 ```
 
-# Basic Plot (Latest)
-This scatterplot seems to demonstrate some correlation between infl and covid vaccination but the relationship appears very weak
-There are a considerable amount of counties that report a near 100% vaccination rate, they are likely low population counties.
+# Merging dataframes
+We employ an inner join to combine the influenza vaccine dataframes as well as various dates of the covid vaccination data. We chose one month, six months, and on year from the release of the covid_vaccine as we believed this would give us the most important and relevant dates when it comes to identifying covid vaccine acceptance relative to influenza vaccine acceptance in 2020.
 ```{r}
-vaccine_data_latest %>%
-        ggplot(aes(x = Influenza_Percentage, y = Covid_Percentage)) +
-        geom_point()
+joinedData <- inner_join(influenza_vaccine_data_cleaned, covid_vaccine_data_cleaned, by = "FIPS")
+#print(joinedData)
+
+FirstMonth <- joinedData%>%
+  select(Covid_Percentage, Date,FIPS, Census2019_18PlusPop )%>%
+  filter(Date == "2021-01-17")%>%
+  rename(fips = FIPS)
+
+SixMonths <- joinedData %>%
+  select(Covid_Percentage, Date,FIPS, Census2019_18PlusPop)%>%
+  filter(Date ==  "2021-06-17")%>%
+  rename(fips = FIPS)
+
+OneYear <- joinedData %>%
+  select(Covid_Percentage, Date,FIPS, Census2019_18PlusPop)%>%
+  filter(Date == "2022-01-17")%>%
+  rename(fips = FIPS)
+
+influenza_vaccine_data_cleaned1 <- influenza_vaccine_data_cleaned%>%
+  rename(fips = FIPS)
+
+FirstMonthjoinedPlus <- inner_join(FirstMonth, influenza_vaccine_data_cleaned1, by = "fips" )
+SixMonthsjoinedPlus <- inner_join(SixMonths, influenza_vaccine_data_cleaned1, by = "fips" )
+oneYearjoinedPlus <- inner_join(OneYear, influenza_vaccine_data_cleaned1, by = "fips" )
+print(sample_n(FirstMonthjoinedPlus,10))
 ```
-# County Map Example
+
+# Mapping Information
+Maps of covid vaccine percentage by county across multiple dates, as well as influenza vaccine data in 2019-2020. This is simply to give a quick visual representation of the cleaned data before we attempt to analyze it.
 ```{r}
+
+
+US_One_Month <- joinedData %>%
+  select(FIPS, Covid_Percentage, Date)%>%
+  filter(Date == "2021-01-17")%>%
+  rename(fips = FIPS)
+
+US_Six_Month <- joinedData %>%
+  select(FIPS, Covid_Percentage, Date)%>%
+  filter(Date ==  "2021-06-17")%>%
+  rename(fips = FIPS)
+
+US_One_Year <- joinedData %>%
+  select(FIPS, Covid_Percentage, Date)%>%
+  filter(Date == "2022-01-17")%>%
+  rename(fips = FIPS)
+
+
 library(usmap)
-vaccine_data_latest_corrected = rename(vaccine_data_latest, fips = FIPS) # For some reason the map library requires the fips column name to be lowercase
-plot_usmap( data = vaccine_data_latest_corrected , values = "Influenza_Percentage", "counties", color="black")
-plot_usmap( data = vaccine_data_latest_corrected , values = "Covid_Percentage", "counties", color="black")
+ # For some reason the map library requires the fips column name to be lowercase
 
+plot_usmap(data = influenza_vaccine_data_cleaned1, values = "Influenza_Percentage", "counties", color="black")+
+  labs(title = "2019-2020 Influenza vaccine percentage")
+
+plot_usmap(data = US_One_Month, values = "Covid_Percentage", "counties", color="black")+
+  labs(title = "COVID 19 vaccine percentage one month after it was released")
+
+plot_usmap(data = US_Six_Month, values = "Covid_Percentage", "counties", color="black")+
+  labs(title = "COVID 19 vaccine percentage six month after it was released")
+
+plot_usmap(data = US_One_Year, values = "Covid_Percentage", "counties", color="black")+
+  labs(title = "COVID 19 vaccine percentage one year after it was released")
 ```
+# Plotting
+We plotted the influenza vaccine data against the 3 dates of covid vaccine data on a scatterplot and graphed a line of best fit. However, we observed that our data has far too many outliers to produce any coherent result, evident by the numerous counties with 0% or 100% covid vaccination rates.
+```{r}
+#FirstMonthJoined
+#SixMonthsjoined
+#OneYearJoined
+
+
+FirstMonthjoinedPlus %>%
+        ggplot(aes(x = Influenza_Percentage, y = Covid_Percentage)) +
+        geom_point()+
+        labs(title = "One months after the release of the covid 19 Vaccine") +
+        geom_smooth(method = "loess",
+              formula = y ~ x)
+
+ # cor(FirstMonthjoinedPlus$Influenza_Percentage, FirstMonthjoinedPlus$Covid_Percentage)
+
+
+SixMonthsjoinedPlus %>%
+        ggplot(aes(x = Influenza_Percentage, y = Covid_Percentage))+
+        geom_point()+
+        labs(title = "Six months after the release of the covid 19 Vaccine") +
+        geom_smooth(method = "loess",
+              formula = y ~ x)
+
+##  cor(SixMonthsCors$Influenza_Percentage, SixMonthsCors$Covid_Percentage)
+
+oneYearjoinedPlus %>%
+        ggplot(aes(x = Influenza_Percentage, y = Covid_Percentage)) +
+        geom_point()+
+        labs(title = "One Year after the release of the covid 19 Vaccine") +
+        geom_smooth(method = "loess",
+              formula = y ~ x)
+
+#OneYearCors<- oneYearjoinedPlus%>%
+  #cor(Influenza_Percentage, Covid_Percentage)
+```
+# Remove outliers
+Remove counties that have less than 1000 people using the 2019 census data as they don't have a sufficient sample size. In addition, remove counties with a 100% or 0% covid vaccination rates as these are counties that either have some special priority by the federal government or no access and are therefore unrepresentative. This results in our 3 final datasets, each with 5 columns containing FIPS (County identifier), Date, Covid_Percentage, Influenza_Percentage, and Census2019 18+ Data. Each dataframe describes a different year in which the Covid_Percentage was calculated. (Ideally we would've compressed our data into a single dataframe to prevent the repetition of non-covid data, however we have not done that). Each row represents a unique county. Date is in YYYY-MM-DD format. Covid and Influenza percentage are percentages without the % symbol. Census2019 Data is a numeric value describing the estimated amount of people in the county.
+```{r}
+pop_limit = 1000
+
+OneYear <- OneYear%>%
+  filter(Covid_Percentage < 100)%>%
+  filter(Covid_Percentage > 1)
+
+FirstMonthjoinedPlus_Out <- FirstMonthjoinedPlus %>%
+  filter(Census2019_18PlusPop > pop_limit) %>%
+  filter(Covid_Percentage < 100) %>%
+  filter(Covid_Percentage > 1)
+
+SixMonthsjoinedPlus_Out <- SixMonthsjoinedPlus %>%
+  filter(Census2019_18PlusPop > pop_limit) %>%
+  filter(Covid_Percentage < 100) %>%
+  filter(Covid_Percentage > 1)
+
+oneYearjoinedPlus_Out <- oneYearjoinedPlus %>%
+  filter(Census2019_18PlusPop > pop_limit) %>%
+  filter(Covid_Percentage < 100) %>%
+  filter(Covid_Percentage > 1)
+
+print(sample_n(FirstMonthjoinedPlus_Out,20))
+```
+
+# Replot data with outliers removed
+We can observe that after one month there is a weak positive correlation, suggesting that there may be some correlation between influenza and covid vaccine acceptance.
+```{r}
+#FirstMonthJoined
+#SixMonthsjoined
+#OneYearJoined
+
+
+FirstMonthjoinedPlus_Out %>%
+        ggplot(aes(x = Influenza_Percentage, y = Covid_Percentage)) +
+        geom_point()+
+        labs(title = "One months after the release of the covid 19 Vaccine") +
+        geom_smooth(method = "loess",
+              formula = y ~ x)
+
+ # cor(FirstMonthjoinedPlus$Influenza_Percentage, FirstMonthjoinedPlus$Covid_Percentage)
+
+
+SixMonthsjoinedPlus_Out %>%
+        ggplot(aes(x = Influenza_Percentage, y = Covid_Percentage))+
+        geom_point()+
+        labs(title = "Six months after the release of the covid 19 Vaccine") +
+        geom_smooth(method = "loess",
+              formula = y ~ x)
+
+##  cor(SixMonthsCors$Influenza_Percentage, SixMonthsCors$Covid_Percentage)
+
+oneYearjoinedPlus_Out %>%
+        ggplot(aes(x = Influenza_Percentage, y = Covid_Percentage)) +
+        geom_point()+
+        labs(title = "One Year after the release of the covid 19 Vaccine") +
+        geom_smooth(method = "loess",
+              formula = y ~ x)
+
+#OneYearCors<- oneYearjoinedPlus%>%
+  #cor(Influenza_Percentage, Covid_Percentage)
+```
+# Calculating correlation coefficient
+The correlation is nearly nonexistent in the first month (likely due to lack of availability), however it grows quickly. This trend may continue into later years, however our study only goes one year in. This is likely due to vaccine availability, although it may represent how the willingness to take the covid vaccine was less related to vaccine willingness in general and more of various other factors like public mistrust in the safety of a vaccine produced so quickly. The correlation coefficient however never reaches a value of 0.5 or above, so the correlation isn't strong enough to substantiate our hypothesis regarding covid vaccine willingness.
+```{r}
+
+firstMonthCor <- cor(FirstMonthjoinedPlus_Out$Influenza_Percentage, FirstMonthjoinedPlus_Out$Covid_Percentage, use='complete.obs')
+paste("First month correlation coefficent", firstMonthCor)
+
+SixMonthsCor <- cor(SixMonthsjoinedPlus_Out$Influenza_Percentage, SixMonthsjoinedPlus_Out$Covid_Percentage, use='complete.obs')
+paste("Six month correlation coefficent", SixMonthsCor)
+
+oneYearCor <- cor(oneYearjoinedPlus_Out$Influenza_Percentage, oneYearjoinedPlus_Out$Covid_Percentage,  use='complete.obs')
+paste("One year correlation coefficent", oneYearCor)
+```
+# Findings and summary
