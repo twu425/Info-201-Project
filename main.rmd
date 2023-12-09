@@ -1,8 +1,6 @@
 ---
 title: "Info 201 Project"
-output:
-  html_document:
-    code_folding: hide
+output: html_document
 ---
 
 # Introduction
@@ -326,6 +324,15 @@ The influenza vaccine dataset contains information on influenza vaccination cove
 ###  Discuss any data quality issues you encountered
 The datasets provided by the CDC are usually dependable, but there may be some data quality issues that could arise. These could include gaps in the influenza dataset or differences in reporting practices across various counties. It's crucial to give careful attention to these problems and document any missing or inconsistent data during the analysis process. Additionally, the timeliness of the reporting can impact data quality, as vaccination rates may change over time. To mitigate these issues, it's essential to regularly update and cross-validate with other reputable sources, which can enhance the overall robustness and reliability of the analysis.
 
+# Final Dataset
+```{r}
+
+save(FirstMonthjoinedPlus_Out, file = "final_datasets/FirstMonthjoinedPlus_Out.RData")
+save(SixMonthsjoinedPlus_Out, file = "final_datasets/SixMonthsjoinedPlus_Out.RData")
+save(oneYearjoinedPlus_Out, file = "final_datasets/oneYearjoinedPlus_Out.RData")
+
+```
+
 # References
 AJMC Staff. (2021, June 3). A Timeline of COVID-19 Vaccine Developments in 2021. AJMC. https://www.ajmc.com/view/a-timeline-of-covid-19-vaccine-developments-in-2021
 Cohen, S. (2020, December 10). The Fastest Vaccine in History. Www.uclahealth.org. https://www.uclahealth.org/news/the-fastest-vaccine-in-history
@@ -339,13 +346,6 @@ Johnson, N. F., N. Velásquez, Nicholas Johnson Restrepo, Leahy, R., Gabriel, N.
 ‌RPubs - Vaccination and COVID-19 Mortality in Chicago. (2021, February 2). Retrieved December 9, 2023, from Rpubs.com website: https://rpubs.com/williamfparker/720286
 ‌Sun, L., Hymowitz, M., & Pomeranz, H. D. (2021). Eye Protection for Patients With COVID-19 Undergoing Prolonged Prone-Position Ventilation. JAMA Ophthalmology, 139(1), 109–109. https://doi.org/10.1001/jamaophthalmol.2020.4988
 
-# Final Dataset
-```{r}
 
-save(FirstMonthjoinedPlus_Out, file = "final_datasets/FirstMonthjoinedPlus_Out.RData")
-save(SixMonthsjoinedPlus_Out, file = "final_datasets/SixMonthsjoinedPlus_Out.RData")
-save(oneYearjoinedPlus_Out, file = "final_datasets/oneYearjoinedPlus_Out.RData")
-
-```
 
 
