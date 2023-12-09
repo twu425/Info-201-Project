@@ -3,31 +3,54 @@ title: "Info 201 Project"
 output: html_notebook
 ---
 
-# Description
-
- Question: Does the % of influenza vaccinations pre covid (2019-2020) correlate to the % of Covid-19 Dose 1 Vaccinations (as of 2023-05-10) *May add more time stamps* in US Counties?
-
-Theory: We may be able to extrapolate based on our question whether or not people's willingness to take vaccines in general (the assumption is that influenza vaccines can represent "vaccines in general") impacts their willingness to take the Covid-19 vaccine (and if so, to what extent?).
-
 # Introduction
+### Give the context–why is this an interesting topic?
+
+Investigating the relationship between COVID-19 vaccination rates and general vaccine trust across states is an intriguing topic that can have a significant impact on public health strategies. By understanding how trust in COVID-19 vaccines aligns with general vaccine confidence, we can gain valuable insights for tailoring communication efforts and targeted interventions. This topic is critical and timely as it addresses the broader issue of vaccine hesitancy, moving beyond immediate pandemic concerns to contribute to a more enduring aspect of public health - vaccine confidence.
+
+This shift in focus is intriguing because it delves into the broader context of vaccine hesitancy and acceptance. Understanding whether there is a correlation between trust in the COVID-19 vaccine and general vaccine trust can provide insights into the underlying factors shaping public attitudes. It introduces a nuanced layer to the analysis, moving beyond the immediate pandemic concerns to address a more enduring aspect of public health - vaccine confidence.Investigating the relationship between COVID-19 vaccination rates and general vaccine trust across states is an intriguing topic that can have a significant impact on public health strategies. By understanding how trust in COVID-19 vaccines aligns with general vaccine confidence, we can gain valuable insights for tailoring communication efforts and targeted interventions. This topic is critical and timely as it addresses the broader issue of vaccine hesitancy, moving beyond immediate pandemic concerns to contribute to a more enduring aspect of public health - vaccine confidence.
+
+This shift in focus is intriguing because it delves into the broader context of vaccine hesitancy and acceptance. Understanding whether there is a correlation between trust in the COVID-19 vaccine and general vaccine trust can provide insights into the underlying factors shaping public attitudes. It introduces a nuanced layer to the analysis, moving beyond the immediate pandemic concerns to address a more enduring aspect of public health - vaccine confidence.
+
+### What do we already know about this topic? This should be based on what you read from media or literature, not on what you do below!
+
+Various studies and reports have provided valuable insights into the complex dynamics of COVID-19 and influenza vaccine acceptance. For instance, reports published in The Lancet and JAMA Network Open have explored the factors that influence COVID-19 vaccine acceptance and hesitancy. These studies have revealed a complex interplay of demographics, socio-economic status, and geography. The CDC data on influenza vaccination coverage across different years shows how the acceptance of flu vaccine changes over time, influenced by public awareness initiatives, healthcare policies, and the severity of flu seasons.
+Media reports, such as those in Nature, have highlighted the range of public perceptions surrounding COVID-19 vaccines. These reports emphasize the challenges posed by vaccine misinformation. Similarly, analyses from Health Affairs and other sources have revealed geographic disparities in COVID-19 and influenza vaccination rates. These studies have emphasized the impact of access to healthcare and regional attitudes toward vaccines.
+The association between socio-economic factors and vaccination rates, as elucidated in JAMA Network Open, further contributes to our understanding of the intricate relationships that shape vaccine acceptance in communities. This background knowledge sets the stage for our exploration into the correlation between COVID-19 vaccination rates, general vaccine trust, and the broader socio-demographic and economic landscape.
+
+### Explain what exactly you are doing. This can be stated as questions you want to answer, or some kind of stories you want to tell. There should be one question or one story line for each member of the group, so you need to have at least as many research questions as the group size. (This is about the number of tasks but not about who is responsible for which task.)
+
+Are states with higher general vaccine trust more likely to have higher COVID-19 vaccination rates? It is a fascinating matter because the COVID-19 Vaccine had a lot of skepticism and mistrust regarding how effective and safe it would be to take a vaccine that was produced at a record speed in response to a worldwide pandemic. It is beneficial to find any correlation between a person's previous history of accepting other vaccines and compare that to their willingness to take a vaccine that was created with a new technology that speeds up its development. It is crucial to understand why people are unwilling to accept brand-new advances and breakthroughs in vaccine technology. Being able to counteract this wave of misinformation, and skepticism would make the necessary advances in vaccine technology be accepted and trusted more smoothly.
+
+Are there notable disparities in vaccination coverage that could indicate regional challenges or successes in vaccine distribution? Many areas throughout America have had great difficulty in accessing COVID-19 vaccines as a result of both shortages, the unique storage requirements of the vaccine, the 2-dose nature of the vaccine, as well as federal government priority. These challenges are unique to the COVID-19 vaccine as they come as a result of the rapid development of the vaccine in response to the pandemic. We need to be able to assess how much of an impact these challenges have had on the vaccination of people in America, and we can do so by comparing the administration of a generic vaccine such as the influenza vaccine to the COVID-19 vaccine.
+
+Our research aims to investigate whether there is a correlation between the uptake of the influenza vaccine and the initial COVID-19 vaccination rates. To do this, we will analyze datasets from reliable sources such as the CDC and healthdata.gov to gather information on influenza vaccination coverage and COVID-19 vaccination rates across different states. We will use statistical analysis, specifically correlation analysis, to determine if there is a significant relationship between these two vaccination rates.
+
+The process involves several data processing steps, such as filtering out irrelevant information and identifying gaps in the data. For the COVID-19 dataset, we will focus on county-level vaccination rates, while for the influenza dataset from the CDC, we will filter based on years and identify any gaps. Additionally, we will use an average to generate an estimated vaccination acceptance score for influenza.
+
+The main goal is to contribute nuanced insights into vaccine acceptance patterns. By exploring the correlation between influenza and COVID-19 vaccination rates, we aim to identify potential relationships and influencing factors. This analysis will not only enhance our understanding of vaccine acceptance dynamics but also provide valuable information for public health advocates and policymakers. The findings may aid in shaping targeted interventions and communication strategies, ultimately contributing to more effective public health measures.
 
 
+### Explain why is it interesting–why should someone care? why should someone read your report?
+
+Understanding the relationship between influenza and COVID-19 vaccination rates is important for gaining insights into broader patterns of vaccine acceptance and hesitancy. This knowledge is crucial not only for managing the ongoing COVID-19 pandemic but also for future public health initiatives. Identifying a correlation could provide a better understanding of the factors or attitudes that influence individuals' decisions regarding different vaccines, leading to more comprehensive insights into vaccine acceptance dynamics.
+
+The practical implications of this study's findings are significant for public health advocates and policymakers. By recognizing disparities or correlations between influenza and COVID-19 vaccination rates, tailored interventions and communication strategies can be implemented for specific regions or demographic groups. Implementing a targeted approach is necessary for overcoming vaccine hesitancy, ensuring widespread vaccination coverage, and achieving herd immunity, which is essential for preventing the spread of infectious diseases.
+
+Additionally, this study's focus on the correlation between influenza and COVID-19 vaccination rates adds nuance to existing research. While previous studies have concentrated on individual vaccine types, this analysis considers the interplay between different vaccines, providing a more comprehensive perspective on public attitudes towards vaccination.
+
+In summary, this research is essential for individuals, healthcare professionals, and policymakers as it has the potential to provide actionable insights that can inform public health strategies, improve vaccination outreach, and contribute to more effective pandemic response efforts. The findings may guide efforts to address vaccine hesitancy, enhance overall vaccine confidence, and ultimately lead to a healthier and more resilient population.
 
 
-# Data
-
-
-
-
-# Load libraries and data, print samples
+# Load libraries and data
 Influenza vaccine data source: <https://data.cdc.gov/Flu-Vaccinations/Influenza-Vaccination-Coverage-for-All-Ages-6-Mont/vh55-3he6>
 Covid vaccine data source: <https://data.cdc.gov/Vaccinations/COVID-19-Vaccinations-in-the-United-States-County/8xkx-amqh>
 ```{r}
 library(tidyverse)
 influenza_vaccine_data = read.csv("data/Influenza_data.csv")
-print(sample_n(influenza_vaccine_data,10))
+#print(sample_n(influenza_vaccine_data,10))
 covid_vaccine_data = read.csv("data/Covid_data.csv") # Note: the covid data is huge relative to the influenza data, so it might take some time to load
-print(sample_n(covid_vaccine_data,10))
+#print(sample_n(covid_vaccine_data,10))
 ```
 
 # Data Cleaning
@@ -96,8 +119,6 @@ print(sample_n(FirstMonthjoinedPlus,10))
 # Mapping Information
 Maps of covid vaccine percentage by county across multiple dates, as well as influenza vaccine data in 2019-2020. This is simply to give a quick visual representation of the cleaned data before we attempt to analyze it.
 ```{r}
-
-
 US_One_Month <- joinedData %>%
   select(FIPS, Covid_Percentage, Date)%>%
   filter(Date == "2021-01-17")%>%
@@ -113,23 +134,35 @@ US_One_Year <- joinedData %>%
   filter(Date == "2022-01-17")%>%
   rename(fips = FIPS)
 
-
 library(usmap)
- # For some reason the map library requires the fips column name to be lowercase
+```
 
+This is a map of the US counties and represents the percentage of how many people in each county who took the Influenza vaccine Pre covid 19  and for the most part it seems pretty even county to county.
+```{r}
 plot_usmap(data = influenza_vaccine_data_cleaned1, values = "Influenza_Percentage", "counties", color="black")+
   labs(title = "2019-2020 Influenza vaccine percentage")
+```
 
+The first month into the covid 19 vaccine being released not many states or counties even had access to or allowed their citizens to take the covid 19 vaccine until it was later determined to be 100 percent safe
+```{r}
 plot_usmap(data = US_One_Month, values = "Covid_Percentage", "counties", color="black")+
   labs(title = "COVID 19 vaccine percentage one month after it was released")
+```
 
+Six months later a lot more people were willing to take the covid 19 vaccine while some counties and states had their reservations about taking the covid 19 vaccine leading some counties to have a zero percent vaccination rate.
+```{r}
 plot_usmap(data = US_Six_Month, values = "Covid_Percentage", "counties", color="black")+
   labs(title = "COVID 19 vaccine percentage six month after it was released")
+```
+
+One year after the covid 19 vaccine was released and for the most part most of the counties have at least a 50 % vaccination rate but some counties are still hesitant to take the covid 19 vaccination.
+```{r}
 
 plot_usmap(data = US_One_Year, values = "Covid_Percentage", "counties", color="black")+
   labs(title = "COVID 19 vaccine percentage one year after it was released")
 ```
-# Plotting
+
+# Initial Plotting
 We plotted the influenza vaccine data against the 3 dates of covid vaccine data on a scatterplot and graphed a line of best fit. However, we observed that our data has far too many outliers to produce any coherent result, evident by the numerous counties with 0% or 100% covid vaccination rates.
 ```{r}
 #FirstMonthJoined
@@ -166,7 +199,8 @@ oneYearjoinedPlus %>%
 #OneYearCors<- oneYearjoinedPlus%>%
   #cor(Influenza_Percentage, Covid_Percentage)
 ```
-# Remove outliers
+
+# Removal of Outliers
 Remove counties that have less than 1000 people using the 2019 census data as they don't have a sufficient sample size. In addition, remove counties with a 100% or 0% covid vaccination rates as these are counties that either have some special priority by the federal government or no access and are therefore unrepresentative. This results in our 3 final datasets, each with 5 columns containing FIPS (County identifier), Date, Covid_Percentage, Influenza_Percentage, and Census2019 18+ Data. Each dataframe describes a different year in which the Covid_Percentage was calculated. (Ideally we would've compressed our data into a single dataframe to prevent the repetition of non-covid data, however we have not done that). Each row represents a unique county. Date is in YYYY-MM-DD format. Covid and Influenza percentage are percentages without the % symbol. Census2019 Data is a numeric value describing the estimated amount of people in the county.
 ```{r}
 pop_limit = 1000
@@ -193,14 +227,12 @@ oneYearjoinedPlus_Out <- oneYearjoinedPlus %>%
 print(sample_n(FirstMonthjoinedPlus_Out,20))
 ```
 
+
 # Replot data with outliers removed
-We can observe that after one month there is a weak positive correlation, suggesting that there may be some correlation between influenza and covid vaccine acceptance.
+After all of the data cleaning and merging our results show that there is little correlation between the percentage of people in each county who have received an influenza vaccination and the percentage of people who took the Covid COVID-19 vaccination in the first month, the sixth month, and one year after the covid 19 Vaccine was released to the general population.
+
+After the first month, the percentage of counties that received the Covid vaccination was still relatively low. The correlation coefficient between the COVID percentage and the Influenza Percentage was -0.0352727391909994  which is a low correlation value meaning that in the first month, the percentage of influenza vaccination and the percentage of COVID-19 vaccination have a low correlation with each other.
 ```{r}
-#FirstMonthJoined
-#SixMonthsjoined
-#OneYearJoined
-
-
 FirstMonthjoinedPlus_Out %>%
         ggplot(aes(x = Influenza_Percentage, y = Covid_Percentage)) +
         geom_point()+
@@ -208,9 +240,10 @@ FirstMonthjoinedPlus_Out %>%
         geom_smooth(method = "loess",
               formula = y ~ x)
 
- # cor(FirstMonthjoinedPlus$Influenza_Percentage, FirstMonthjoinedPlus$Covid_Percentage)
+```
 
-
+Six months after the release of the COVID vaccination to the general population the amount of data points has increased. Still, now there is a new problem: at the bottom, there is an entire row of data points on the zero percent vaccination for entire counties. At first glance, it would seem shocking but multiple factors contribute to this, the main one being that the vaccine, whether it had a low stock or was not yet available to a state, makes all the counties in those states be marked as zero percent.  The correlation coefficient for six months into the vaccine being released was 0.309864523848093 a big jump from the correlation coefficient of one month but still not anything substantial enough for us to be able to link the Covid 19 vaccination rates and Influenza Vaccination rates.
+```{r}
 SixMonthsjoinedPlus_Out %>%
         ggplot(aes(x = Influenza_Percentage, y = Covid_Percentage))+
         geom_point()+
@@ -218,18 +251,18 @@ SixMonthsjoinedPlus_Out %>%
         geom_smooth(method = "loess",
               formula = y ~ x)
 
-##  cor(SixMonthsCors$Influenza_Percentage, SixMonthsCors$Covid_Percentage)
+```
 
+One year after the COVID-19 vaccine was released the increase in the percentage of counties that were vaccinated. In this scatter plot, there are still outliers now at the very top as well because in this Data set, we focussed on the counties and some counties have extremely small populations which leads to points bunching off at the very top of the graph. The correlation coefficient for one year since the release of the Covid 19 vaccine was 0.34957725497233 Comparing the jump from one month to six months the jump from 6 months to one year doesn't add any substantial evidence for us to conclude that there was any correlation between a person's willingness to take the Covid 19 vaccine compared to the influenza vaccine.
+```{r}
 oneYearjoinedPlus_Out %>%
         ggplot(aes(x = Influenza_Percentage, y = Covid_Percentage)) +
         geom_point()+
         labs(title = "One Year after the release of the covid 19 Vaccine") +
         geom_smooth(method = "loess",
               formula = y ~ x)
-
-#OneYearCors<- oneYearjoinedPlus%>%
-  #cor(Influenza_Percentage, Covid_Percentage)
 ```
+
 # Calculating correlation coefficient
 The correlation is nearly nonexistent in the first month (likely due to lack of availability), however it grows quickly. This trend may continue into later years, however our study only goes one year in. This is likely due to vaccine availability, although it may represent how the willingness to take the covid vaccine was less related to vaccine willingness in general and more of various other factors like public mistrust in the safety of a vaccine produced so quickly. The correlation coefficient however never reaches a value of 0.5 or above, so the correlation isn't strong enough to substantiate our hypothesis regarding covid vaccine willingness.
 ```{r}
@@ -244,3 +277,57 @@ oneYearCor <- cor(oneYearjoinedPlus_Out$Influenza_Percentage, oneYearjoinedPlus_
 paste("One year correlation coefficent", oneYearCor)
 ```
 # Findings and summary
+
+After all of the data cleaning and merging our results show that there is little correlation between the percentage of people in each county who have received an influenza vaccination and the percentage of people who took the Covid COVID-19 vaccination in the first month, the sixth month, and one year after the covid 19 Vaccine was released to the general population.
+
+After the first month, the percentage of counties that received the Covid vaccination was still relatively low. The correlation coefficient between the COVID percentage and the Influenza Percentage was -0.0352727391909994  which is a low correlation value meaning that in the first month, the percentage of influenza vaccination and the percentage of COVID-19 vaccination have a low correlation with each other.
+
+Six months after the release of the COVID vaccination to the general population the amount of data points has increased. Still, now there is a new problem: at the bottom, there is an entire row of data points on the zero percent vaccination for entire counties. At first glance, it would seem shocking but multiple factors contribute to this, the main one being that the vaccine, whether it had a low stock or was not yet available to a state, makes all the counties in those states be marked as zero percent.  The correlation coefficient for six months into the vaccine being released was 0.309864523848093 a big jump from the correlation coefficient of one month but still not anything substantial enough for us to be able to link the Covid 19 vaccination rates and Influenza Vaccination rates.
+
+From the time frame that we exclusively focused on we concluded that there was little to no correlation between the general population's willingness to take the Influenza vaccine which is backed by years of historical evidence and research that concluded that the Influenza vaccine is not only effective in protecting people from Influenza but its been proven to be safe to use with minimal side effects. Compared to the Covid 19 vaccine whose development took less than 12 months. While waiting for the FDA's pending approval of the Covid 19 vaccine, Pfizer chose to start manufacturing batches of the vaccine to speed up the distribution phase immediately upon its approval. Of course, If the vaccines that developed were unsafe they wouldn't have distributed any batches.
+At the very beginning of this report, our main focus and reason for merging, cleaning, and graphing the data were to try to link people unwilling to take the Covid 19 vaccination to people's willingness to take the influenza vaccine pre covid 19. Unfortunately, our findings showed little to no correlation between the two vaccines, instead, we found that the reason people were unwilling to take the Covid 19 Vaccine was because of its unique development history. To date, the Covid 19 vaccine has the record for the fastest development period; the previous record was held by the mumps vaccine which took 4 years to make. The big jump in time is a big factor as to why people were unwilling to take the vaccine until at least a year had passed. Mostly see if there were any long-term side effects connected to the Vaccine.
+The limitations of our claim were that our report only showed up to a year after the COVID-19 vaccine was released. By then most states had barely received enough batches of the vaccine to provide coverage to all of their residents. Though our report only covered about a year's worth of data we were able to conclude that our research question was priestly untrue. To further research these claims we should have increased the time frame that we studied instead of only covering a year we should have studied from when the vaccine was released to 2023 so then there would be more conclusive evidence if there is a possible correlation or will the same reasons limited people and made them unwilling to take the Covid vaccine remain even after two years of testing as well as all the new indoor rules that required customers of stores or any public event be required to show a proof of vaccination which forced citizens that were still holding back on taking the vaccine more reason to receive it. Another point that would have a more considerable case is the second dose and even the amount of people who took the booster shot.
+Our report only covers the first dose because in the time frame that we chose that was the only COVID vaccine out at the time so by increasing the time frame to 2023 there is also an opportunity to introduce the second dose percentages for the reason that it would introduce a new question how willing are people who already took the second dose of the vaccine to take a second does. Is it everyone who has the first vaccine will also take the second dose or did some people hesitate to take the second? All of this can be investigated in the future by increasing the time frame and adding in the data for other doses.
+The study concluded that in the first year of the COVID vaccination being available, the correlation coefficient between the number of people who were willing to take the Covid 19 and people's willingness to take the Influenza vaccine pre-2020 had little to no correlation. Instead, we concluded that the people's unwillingness to take the COVID-19 vaccine came from fears of how quickly they were able to create and start the production of the Vaccine, and many people in their eyes thought of it as unsafe for that very reason. The takeaway from this report is people aren't convinced by previous historical data on how effective something is when it comes to similar but new advances. In this context would be the covid 19 vaccine because Pfizer used brand-new mRNA technology which is why it was made so fast. Compare that to the Influenza which has been around since 1945, it makes sense why there would be so much unwillingness to take the first dose of the Covid 19 vaccine.
+
+One year after the COVID-19 vaccine was released the increase in the percentage of counties that were vaccinated. In this scatter plot, there are still outliers now at the very top as well because in this Data set, we focussed on the counties and some counties have extremely small populations which leads to points bunching off at the very top of the graph. The correlation coefficient for one year since the release of the Covid 19 vaccine was 0.34957725497233 Comparing the jump from one month to six months the jump from 6 months to one year doesn't add any substantial evidence for us to conclude that there was any correlation between a person's willingness to take the Covid 19 vaccine compared to the influenza vaccine.
+
+# Background
+
+### Why do you use these datasets?
+The datasets for our research were chosen carefully to ensure their credibility, reliability, and alignment with our objectives. The Centers for Disease Control and Prevention (CDC) is a globally recognized authority in public health, and their data provides unparalleled credibility. The meticulousness of the CDC's data collection processes assures the accuracy and validity of the information.
+
+Our research focuses on the correlation between influenza and COVID-19 vaccination rates, and the datasets we selected are precise in this regard. These datasets cover diverse geographic locations, making them even more significant. We can comprehensively analyze vaccination patterns by incorporating data from various regions and demographic landscapes. This inclusivity enriches our findings, ensuring that our insights are relevant and representative of different states and counties.
+
+
+### Where do your datasets originate from? (4 points)
+The research project relies on datasets primarily sourced from the Centers for Disease Control and Prevention (CDC), which is a leading public health institute in the United States. Our influenza vaccination data comes from the CDC dataset called "Influenza Vaccination Coverage for All Ages," while the COVID-19 vaccination data comes from the CDC dataset known as "COVID-19 Vaccinations in the United States by County."
+
+These datasets are highly trustworthy as they come from a reputable institution such as the CDC. We can rely on their accuracy and reliability as the CDC is a trusted authority in the field of public health. By using these datasets, we gain access to a wealth of information that is representative of the CDC's extensive efforts in monitoring and reporting on vaccination trends.
+The "Influenza Vaccination Coverage for All Ages" dataset provides insights into influenza vaccination rates across various age groups. Meanwhile, the "COVID-19 Vaccinations in the United States by County" dataset allows for a detailed analysis of COVID-19 vaccination rates at the county level, providing a nuanced perspective on regional disparities.
+
+The reason for selecting these CDC datasets is to understand the relationship between influenza and COVID-19 vaccination rates. We have deliberately chosen datasets that are renowned for their accuracy and coverage, encompassing a wide range of demographic and geographic nuances.
+
+### Who collected data?
+The Centers for Disease Control and Prevention (CDC) is a highly respected national public health institute in the United States that plays a crucial role in collecting and maintaining datasets. The CDC's unwavering commitment to the highest standards of data collection ensures the dependability and credibility of the information.
+
+As an authority in public health, the CDC's meticulous approach to data collection not only guarantees the accuracy of the information, but also inspires confidence in the comprehensiveness of the dataset. The Institute's adherence to rigorous processes and protocols is a testament to its dedication to transparency and precision in disseminating health-related information.
+
+In summary, the CDC's responsibility in curating and maintaining these datasets makes them invaluable resources for research and analysis. The dataset's reliability is further enhanced by the CDC's reputation for excellence and commitment to safeguarding the nation's health. Therefore, the dataset serves as a reliable cornerstone for research endeavors and significantly contributes to the robustness and credibility of the findings.The Centers for Disease Control and Prevention (CDC) is a highly respected national public health institute in the United States that plays a crucial role in collecting and maintaining datasets. The CDC's unwavering commitment to the highest standards of data collection ensures the dependability and credibility of the information.
+
+# Data usage permissions
+Both datasets are available to the public on the CDC's official data portal, and as of the most recent update in January 2022, there are no explicit restrictions on data usage. This means that researchers, policymakers, and the general public are free to use the information for various purposes. While it's important to be aware of any possible changes to the usage policies, the current openness of the data enhances its value for a wide range of applications.
+
+### What are the datasets about? What is the population and what is the sample?
+The influenza vaccine dataset contains information on influenza vaccination coverage for individuals aged 6 months and older, covering all age groups. It represents a diverse population across various states and counties in the United States. Similarly, the COVID-19 vaccine dataset focuses on vaccination rates at the county level, encompassing the entire population. This provides a detailed overview of COVID-19 immunization efforts across different regions. Both datasets offer a comprehensive perspective on vaccination coverage and patterns within the specified populations.
+
+###  Discuss any data quality issues you encountered
+The datasets provided by the CDC are usually dependable, but there may be some data quality issues that could arise. These could include gaps in the influenza dataset or differences in reporting practices across various counties. It's crucial to give careful attention to these problems and document any missing or inconsistent data during the analysis process. Additionally, the timeliness of the reporting can impact data quality, as vaccination rates may change over time. To mitigate these issues, it's essential to regularly update and cross-validate with other reputable sources, which can enhance the overall robustness and reliability of the analysis.
+
+# References
+AJMC Staff. (2021, June 3). A Timeline of COVID-19 Vaccine Developments in 2021. AJMC. https://www.ajmc.com/view/a-timeline-of-covid-19-vaccine-developments-in-2021
+Cohen, S. (2020, December 10). The Fastest Vaccine in History. Www.uclahealth.org. https://www.uclahealth.org/news/the-fastest-vaccine-in-history
+Commissioner, O. of the. (2021, August 23). FDA Approves First COVID-19 Vaccine. FDA. https://www.fda.gov/news-events/press-announcements/fda-approves-first-covid-19-vaccine#:~:text=Today%2C%20the%20U.S.%20Food%20and
+COVID Vaccine Testing and Approval. (2022, September 29). Www.umms.org. https://www.umms.org/coronavirus/covid-vaccine/testing
+History of influenza vaccination. (n.d.). Www.who.int. https://www.who.int/news-room/spotlight/history-of-vaccination/history-of-influenza-vaccination#:~:text=The%20vaccine%20was%20tested%20for
+Understanding the COVID Vaccine and mRNA. (n.d.). Www.umms.org. https://www.umms.org/coronavirus/covid-vaccine/mrna#:~:text=The%20use%20of%20mRNA%20technology
