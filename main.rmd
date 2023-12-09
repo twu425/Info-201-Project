@@ -1,6 +1,8 @@
 ---
 title: "Info 201 Project"
-output: html_notebook
+output:
+  html_document:
+    code_folding: hide
 ---
 
 # Introduction
@@ -331,3 +333,19 @@ Commissioner, O. of the. (2021, August 23). FDA Approves First COVID-19 Vaccine.
 COVID Vaccine Testing and Approval. (2022, September 29). Www.umms.org. https://www.umms.org/coronavirus/covid-vaccine/testing
 History of influenza vaccination. (n.d.). Www.who.int. https://www.who.int/news-room/spotlight/history-of-vaccination/history-of-influenza-vaccination#:~:text=The%20vaccine%20was%20tested%20for
 Understanding the COVID Vaccine and mRNA. (n.d.). Www.umms.org. https://www.umms.org/coronavirus/covid-vaccine/mrna#:~:text=The%20use%20of%20mRNA%20technology
+Center, N. (2021, May 13). Influenza Vaccination Coverage for All Ages (6+ Months). Retrieved December 9, 2023, from Cdc.gov website: https://data.cdc.gov/Flu-Vaccinations/Influenza-Vaccination-Coverage-for-All-Ages-6-Mont/vh55-3he6/about_data
+Hippolyte Lequain, Mathieu Gerfaud‐Valentin, Fontaine, J., Ferrant, E., Grumet, P., Yvan Jamilloux, … P. Sève. (2021). Crystal‐storing histiocytosis and Bing‐Neel‐like syndrome revealing a small B‐cell lymphoma with plasmacytic differentiation, presumed to be a marginal zone lymphoma. Clinical Case Reports, 9(12). https://doi.org/10.1002/ccr3.5202
+Johnson, N. F., N. Velásquez, Nicholas Johnson Restrepo, Leahy, R., Gabriel, N., Sara El Oud, … Lupu, Y. (2020). The online competition between pro- and anti-vaccination views. Nature, 582(7811), 230–233. https://doi.org/10.1038/s41586-020-2281-1
+‌RPubs - Vaccination and COVID-19 Mortality in Chicago. (2021, February 2). Retrieved December 9, 2023, from Rpubs.com website: https://rpubs.com/williamfparker/720286
+‌Sun, L., Hymowitz, M., & Pomeranz, H. D. (2021). Eye Protection for Patients With COVID-19 Undergoing Prolonged Prone-Position Ventilation. JAMA Ophthalmology, 139(1), 109–109. https://doi.org/10.1001/jamaophthalmol.2020.4988
+
+# Final Dataset
+```{r}
+
+save(FirstMonthjoinedPlus_Out, file = "final_datasets/FirstMonthjoinedPlus_Out.RData")
+save(SixMonthsjoinedPlus_Out, file = "final_datasets/SixMonthsjoinedPlus_Out.RData")
+save(oneYearjoinedPlus_Out, file = "final_datasets/oneYearjoinedPlus_Out.RData")
+
+```
+
+
